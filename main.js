@@ -6,6 +6,7 @@ const path = require('path');
 const url = require('url');
 
 //コメント追加
+//2回目
 //メインウインドウ
 let mainWindow;
 function createWindow () {
