@@ -12,6 +12,7 @@ const url = require('url');
 //5th tablet commit
 //6th tablet add
 //7th test
+//8th
 //メインウインドウ
 let mainWindow;
 function createWindow () {
@@ -32,7 +33,7 @@ function createWindow () {
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
-}
+};
 
 //初期化が完了したときの処理
 app.on('ready',createWindow);
