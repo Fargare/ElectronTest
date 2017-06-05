@@ -11,6 +11,7 @@ const url = require('url');
 //4th challenge
 //5th tablet commit
 //6th tablet add
+//7th test
 //メインウインドウ
 let mainWindow;
 function createWindow () {
