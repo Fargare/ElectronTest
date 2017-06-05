@@ -10,6 +10,7 @@ const url = require('url');
 //3kaime
 //4th challenge
 //5th tablet commit
+//6th tablet add
 //メインウインドウ
 let mainWindow;
 function createWindow () {
