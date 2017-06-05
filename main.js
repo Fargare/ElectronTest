@@ -7,6 +7,7 @@ const url = require('url');
 
 //コメント追加
 //2回目
+//3kaime
 //メインウインドウ
 let mainWindow;
 function createWindow () {
