@@ -5,6 +5,7 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const url = require('url');
 
+//コメント追加
 //メインウインドウ
 let mainWindow;
 function createWindow () {
