@@ -13,6 +13,7 @@ const url = require('url');
 //6th tablet add
 //7th test
 //8th
+//9th
 //メインウインドウ
 let mainWindow;
 function createWindow () {
