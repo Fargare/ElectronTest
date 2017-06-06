@@ -15,6 +15,7 @@ const url = require('url');
 //8th
 //9th
 //わりこみ
+//10th from Laptop
 //メインウインドウ
 let mainWindow;
 function createWindow () {
