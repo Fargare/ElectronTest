@@ -14,13 +14,13 @@ const url = require('url');
 //7th test
 //8th
 //9th
-//0607
-=======
 //わりこみ
 //10th from Laptop
 //11th
 //12th
+//13th from openlan
 //メインウインドウ
+
 let mainWindow;
 function createWindow () {
   mainWindow = new BrowserWindow({width: 800,height: 600});
