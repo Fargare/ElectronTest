@@ -14,6 +14,7 @@ const url = require('url');
 //7th test
 //8th
 //9th
+//0607
 //メインウインドウ
 let mainWindow;
 function createWindow () {
