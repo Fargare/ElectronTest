@@ -6,20 +6,6 @@ const path = require('path');
 const url = require('url');
 
 //コメント追加
-//2回目
-//3kaime
-//4th challenge
-//5th tablet commit
-//6th tablet add
-//7th test
-//8th
-//9th
-//わりこみ
-//10th from Laptop
-//11th
-//12th
-//13th from Laptop
-//14th test
 //メインウインドウ
 let mainWindow;
 function createWindow () {
