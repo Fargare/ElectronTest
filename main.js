@@ -27,7 +27,6 @@ function createWindow () {
     mainWindow = null;
   });
 };
-//comment
 
 //初期化が完了したときの処理
 app.on('ready',createWindow);
@@ -59,3 +58,4 @@ if文やfor文などのブロックのなかに限定の範囲
 const:再宣言も再代入も不可
 let:再宣言が不可
 ※constはオブジェクトで宣言した場合、オブジェクトの中身については再代入することができる。
+*/
