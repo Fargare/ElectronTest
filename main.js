@@ -27,6 +27,7 @@ function createWindow () {
     mainWindow = null;
   });
 };
+//comment
 
 //初期化が完了したときの処理
 app.on('ready',createWindow);
