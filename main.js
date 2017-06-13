@@ -36,6 +36,7 @@ function createWindow () {
 };
 
 //初期化が完了したときの処理
+//ここで上で作られたcreateWindowが処理される
 app.on('ready',createWindow);
 
 //すべてのウインドウが閉じたときの処理
