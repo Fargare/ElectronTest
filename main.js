@@ -9,22 +9,7 @@ const path = require('path');
 const url = require('url');
 
 //コメント追加
-<<<<<<< HEAD
-//2回目
-//3kaime
-//4th challenge
-//5th tablet commit
-//6th tablet add
-//7th test
-//8th
-//9th
-//わりこみ
-//10th from Laptop
-//11th
-//12th
-//13th from openlan
-=======
->>>>>>> ad31351f88b5bd42301f227deccf93ed1ae2a58a
+
 //メインウインドウ
 
 let mainWindow;
