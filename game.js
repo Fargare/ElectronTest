@@ -13,6 +13,7 @@ phina.globalize();
 
 // MainScene クラスを定義
 phina.define('MainScene', {
+  //2016年のアップデートで"DisplayScene"から"CanvasScene"に変更
   superClass: 'CanvasScene',
   init: function() {
     this.superInit({
@@ -66,6 +67,7 @@ phina.define('MainScene', {
 phina.main(function() {
   // アプリケーション生成
   const app = GameApp({
+    //GameAppのコンストラクタにj連想配列形式でパラメータを与える。
     startLabel: 'main', // メインシーンから開始する
     fit : false,
     width:SCREEN_WIDTH,
