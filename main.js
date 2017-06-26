@@ -17,7 +17,7 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     width: 820,
     height: 620,
-    frame : false
+    // frame : false
   });
 
   //メインウインドウに表示するURLを指定します
