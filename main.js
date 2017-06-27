@@ -5,6 +5,8 @@ const app = electron.app;
 //ウインドウを作成するモジュール
 const BrowserWindow = electron.BrowserWindow;
 
+const globalShortcut = electron.globalShortcut;
+
 const path = require('path');
 const url = require('url');
 
@@ -15,9 +17,9 @@ const url = require('url');
 let mainWindow;
 function createWindow () {
   mainWindow = new BrowserWindow({
-    width: 820,
-    height: 620,
-    // frame : false
+    width: 800,
+    height: 600,
+    frame : false
   });
 
   //メインウインドウに表示するURLを指定します
@@ -29,13 +31,27 @@ function createWindow () {
   }));
 
   //デベロッパーツールの起動
-  //mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   //メインウインドウが閉じられたときの処理
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
 };
+
+
+
+app.on('ready', () => {
+  globalShortcut.register('esc', () => {
+    app.quit();
+  })
+  globalShortcut.register('F5', () => {
+    console.log("relaunch");
+    app.relaunch();
+    app.exit(0);
+  })
+})
+
 
 //初期化が完了したときの処理
 //ここで上で作られたcreateWindowが処理される
