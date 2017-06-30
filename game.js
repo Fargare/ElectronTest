@@ -40,6 +40,8 @@ phina.define('MainScene', {
 
     const animation_flag = 0;
     this.animation_flag = animation_flag;
+    const selectLR = 0;
+    this.selectLR = selectLR;
     // const chest_empty_R = Sprite('chest_empty').addChildTo(this);
     //
     // const chest_empty_L = Sprite('chest_empty').addChildTo(this);
@@ -68,33 +70,49 @@ phina.define('MainScene', {
     if(keyboard.getKey('a')){
       if(this.animation_flag == 0){
         this.animation_flag = 1;
+        this.selectLR = 0;
       }
     };
 
     if(keyboard.getKey('b')){
-      this.chest_R.setImage("chest_gold",220,220);
+      if(this.animation_flag == 0){
+        this.animation_flag = 1;
+        this.selectLR = 1;
+      }
     };
 
     if(this.animation_flag == 1){
       this.animation_flag = 2;
-      const self = this.chest_L;
-      this.chest_L.tweener
+      const LR = this.selectLR;
+      let self;
+      if (LR ==0){
+        self = this.chest_L;
+      }
+      else{
+        self = this.chest_R;
+      }
+      self.tweener
       .to({
-        scaleX:1.2,
-        scaleY:1.2,
-      },200,'easeOutBounce')
+        scaleX:1.3,
+        scaleY:1.3,
+      },150,'easeOutBounce')
       .to({
         scaleX:1,
         scaleY:1,
-      },200,'easeInBounce')
-      .wait(500)
+      },150,'easeInBounce')
+      .wait(400)
       .to({
-        scaleX:1.2,
-        scaleY:1.2,
-      },200,'easeInQuart')
+        scaleX:1.5,
+        scaleY:1.5,
+      },100,'easeInQuart')
       .call(function(){
         console.log("animation done")
-        self.setImage("chest_empty",220,220);
+        if (LR ==0){
+          self.setImage("chest_empty",220,220);
+        }
+        else{
+          self.setImage("chest_gold",220,220);
+        }
       }).setLoop(false);
 
     }
