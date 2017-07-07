@@ -12,9 +12,8 @@ const ASSETS = {
 
 const ipcRenderer = require('electron').ipcRenderer;
 
-let button_a = false;
-let button_b = false;
-
+let button_c = false;
+let button_d = false;
 // phina.js をグローバル領域に展開
 phina.globalize();
 
@@ -47,15 +46,20 @@ phina.define('MainScene', {
     this.animation_flag = animation_flag;
     const selectLR = 0;
     this.selectLR = selectLR;
-
-    const gold = Math.randint(0,1);
-    console.log("正解は:" + gold);
-    this.gold = gold;
-
-    const rounds = 0;
-
-    const score = 0;
-    this.score = score;
+    // const chest_empty_R = Sprite('chest_empty').addChildTo(this);
+    //
+    // const chest_empty_L = Sprite('chest_empty').addChildTo(this);
+    // chest_empty.x= this.gridX.center(-3);
+    // chest_empty.y= this.gridY.center(2);
+    // chest_empty.width = 220;
+    // chest_empty.height = 220;
+    // const chest_gold_L = Sprite('chest_gold').addChildTo(this);
+    // const chest_gold_R = Sprite('chest_gold').addChildTo(this);
+    //
+    // chest_gold.x= this.gridX.center(+3);
+    // chest_gold.y= this.gridY.center(2);
+    // chest_gold.width = 220;
+    // chest_gold.height = 220;
 
     // ラベルを生成
     this.label = Label('金貨の入った宝箱をあてよう！！').addChildTo(this);
@@ -63,57 +67,53 @@ phina.define('MainScene', {
     this.label.y = this.gridY.center(-4); // y 座標
     this.label.fontSize = 40,
     this.label.fill = 'white'; // 塗りつぶし色
-
-    this.score_label = Label(this.score).addChildTo(this);
-    this.score_label.x = this.gridX.center();
-    this.score_label.y = this.gridY.center(-2);
-    this.score_label.fontSize = 50;
-    this.score_label.fill = 'yellow';
-
   },
 
 
   update: function(app) {
-    this.score_label.text = this.score;
     //ipc通信でシンクロできるぞ
     // console.log(ipcRenderer.sendSync('synchronous-message','ping'));
-    const keyboard = app.keyboard;
 
-    if (button_a){
-      if(this.animation_flag == 0 && (this.chest_L.tweener.playing == false || this.chest_R.tweener.playing == false)){
-        this.animation_flag = 1;
-        this.selectLR = 0;
+    // console.log(this.animation_flag);
+    const keyboard = app.keyboard;
+    // if(keyboard.getKey('a')){
+    //   if(this.animation_flag == 0){
+    //     this.animation_flag = 1;
+    //     this.selectLR = 0;
+    //   }
+    // };
+    //
+    // if(keyboard.getKey('b')){
+    //   if(this.animation_flag == 0){
+    //     this.animation_flag = 1;
+    //     this.selectLR = 1;
+    //   }
+    // };
+    if (button_c){
+      if(this.animation_flag == 0){
+          button_c = false;
+          this.animation_flag = 1;
+          this.selectLR = 0;
       }
-      if (this.animation_flag ==2 && (this.chest_L.tweener.playing == false || this.chest_R.tweener.playing == false)){
-        console.log("animtion 2->3")
-        this.animation_flag = 3;
-      }
-      button_a = false;
     }
-    if (button_b){
-      if(this.animation_flag == 0 && (this.chest_L.tweener.playing == false || this.chest_R.tweener.playing == false)){
+    if (button_d){
+      if(this.animation_flag == 0){
+          button_d = false;
           this.animation_flag = 1;
           this.selectLR = 1;
       }
-      if (this.animation_flag ==2 && (this.chest_L.tweener.playing == false || this.chest_R.tweener.playing == false)){
-        console.log("animtion 2->3")
-        this.animation_flag = 3;
-      }
-      button_b = false;
-
     }
-
     if(this.animation_flag == 1){
-      this.animation_flag = 2
-      self = this;
-      let chest;
-      if (self.selectLR ==0){
-        chest = this.chest_L;
+      this.animation_flag = 2;
+      const LR = this.selectLR;
+      let self;
+      if (LR ==0){
+        self = this.chest_L;
       }
       else{
-        chest = this.chest_R;
+        self = this.chest_R;
       }
-      chest.tweener.clear()
+      self.tweener
       .to({
         scaleX:1.3,
         scaleY:1.3,
@@ -128,58 +128,26 @@ phina.define('MainScene', {
         scaleY:1.5,
       },100,'easeInQuart')
       .call(function(){
-        // console.log("animation done")
-        if (self.selectLR == self.gold){
-          chest.setImage("chest_gold",220,220);
-          self.score +=10;
+        console.log("animation done")
+        if (LR ==0){
+          self.setImage("chest_empty",220,220);
         }
         else{
-          chest.setImage("chest_empty",220,220);
-          self.score ++;
+          self.setImage("chest_gold",220,220);
         }
       }).setLoop(false);
-    }
 
-    if (this.animation_flag == 3){
-      this.animation_flag = 0;
-      this.gold = Math.randint(0,1);
-      console.log("正解は:" + this.gold);
-
-      for(let i = 0; i < 2; i++){
-        let self;
-        if (i == 0){
-          self = this.chest_L;
-        }
-        else if (i==1) {
-          self = this.chest_R;
-        }
-        self.tweener.clear()
-        .wait(500)
-        .to({
-          scaleX:0,
-          scaleY:0,
-        },200)
-        .wait(1000)
-        .call(function(){
-          self.setImage("chest",220,220);
-        })
-        .to({
-          scaleX:1,
-          scaleY:1,
-        },200)
-        .setLoop(false);
-      }
     }
   }
 });
 ipcRenderer.on('synchronous-message',(event,arg) => {
   console.log(arg);
   event.returnValue = 'pong';
-  if (arg == 'a'){
-    button_a = true;
+  if (arg == 'c'){
+    button_c = true;
   }
-  if (arg == 'b'){
-    button_b = true;
+  if (arg == 'd'){
+    button_d = true;
   }
 })
 // メイン処理

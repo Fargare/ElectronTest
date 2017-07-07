@@ -4,8 +4,8 @@ const electron = require('electron');
 const app = electron.app;
 //ウインドウを作成するモジュール
 const BrowserWindow = electron.BrowserWindow;
-
 const globalShortcut = electron.globalShortcut;
+const ipcMain = electron.ipcMain;
 
 const path = require('path');
 const url = require('url');
@@ -15,13 +15,15 @@ const url = require('url');
 //メインウインドウ
 
 let mainWindow;
+// let secondWindow;
+
 function createWindow () {
+  ////////////////////////1Pウインドウ///////////////////
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    frame : false
+    // frame : false,
   });
-
   //メインウインドウに表示するURLを指定します
   //（今回はmain.jsと同じディレクトリのindex.html）
   mainWindow.loadURL(url.format({
@@ -29,17 +31,33 @@ function createWindow () {
     protocol: 'file:',
     slashes: true
   }));
-
   //デベロッパーツールの起動
   mainWindow.webContents.openDevTools();
-
   //メインウインドウが閉じられたときの処理
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
+  /////////////////////////////セカンドウインドウ///////////////////
+  // secondWindow = new BrowserWindow({
+  //   width:800,
+  //   height: 600,
+  //   // frame:false,
+  // })
+  // secondWindow.loadURL(url.format({
+  //   pathname:path.join(__dirname,'index2.html'),
+  //   protocol:'file:',
+  //   slashes:true
+  // }));
+  // secondWindow.on('closed',function(){
+  //   secondWindow = null;
+  // });
 };
 
 
+ipcMain.on('synchronous-message',(event,arg) => {
+  console.log(arg);
+  event.returnValue = 'pong';
+})
 
 app.on('ready', () => {
   globalShortcut.register('esc', () => {
@@ -50,6 +68,20 @@ app.on('ready', () => {
     app.relaunch();
     app.exit(0);
   })
+  globalShortcut.register('a', () => {
+    mainWindow.webContents.send('synchronous-message','a');
+  })
+  globalShortcut.register('b', () => {
+    mainWindow.webContents.send('synchronous-message','b');
+  })
+  ////////////////////////セカンドウインドウ
+  // globalShortcut.register('c', () => {
+  //   secondWindow.webContents.send('synchronous-message','c');
+  // })
+  // globalShortcut.register('d', () => {
+  //   secondWindow.webContents.send('synchronous-message','d');
+  // })
+  ////////////////////////////////////////////////
 })
 
 
