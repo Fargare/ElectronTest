@@ -10,12 +10,26 @@ const ipcMain = electron.ipcMain;
 const path = require('path');
 const url = require('url');
 
-//コメント追加
+///////////////xlsxファイル//////////////////////
+const xlsx = require('xlsx');
+let workbook = xlsx.readFile('ElectronTest/test.xlsx');
+let sheetNames = workbook.SheetNames;
+console.log(sheetNames);
+let worksheet = workbook.Sheets['Sheet1'];
+console.log(worksheet);
 
+//コメント追加
+let scene_PlayerA = 0;
+let scene_PlayerB = 0;
+let score = 0;
+let gold = Math.floor(Math.random()*2);
+
+let select_PlayerA = 0;
+let select_PlayerB = 0;
 //メインウインドウ
 
 let mainWindow;
-// let secondWindow;
+let secondWindow;
 
 function createWindow () {
   ////////////////////////1Pウインドウ///////////////////
@@ -38,27 +52,91 @@ function createWindow () {
     mainWindow = null;
   });
   /////////////////////////////セカンドウインドウ///////////////////
-  // secondWindow = new BrowserWindow({
-  //   width:800,
-  //   height: 600,
-  //   // frame:false,
-  // })
-  // secondWindow.loadURL(url.format({
-  //   pathname:path.join(__dirname,'index2.html'),
-  //   protocol:'file:',
-  //   slashes:true
-  // }));
-  // secondWindow.on('closed',function(){
-  //   secondWindow = null;
-  // });
+  secondWindow = new BrowserWindow({
+    width:800,
+    height: 600,
+    // frame:false,
+  })
+  secondWindow.loadURL(url.format({
+    pathname:path.join(__dirname,'index2.html'),
+    protocol:'file:',
+    slashes:true
+  }));
+  // secondWindow.webContents.openDevTools();
+  secondWindow.on('closed',function(){
+    secondWindow = null;
+  });
+  ///////////////////////////////////////////
 };
 
-
-ipcMain.on('synchronous-message',(event,arg) => {
-  console.log(arg);
-  event.returnValue = 'pong';
+ipcMain.on('PlayerA',(event,arg) => {
+  // console.log(scene_PlayerA,scene_PlayerB);
+  scene_PlayerA = parseInt(arg);
+  if (scene_PlayerB==scene_PlayerA &&(scene_PlayerA==1|| scene_PlayerA==4||scene_PlayerA==7)){
+    event.returnValue = scene_PlayerA+1;
+  }
+  else{
+    event.returnValue = scene_PlayerA;
+  }
+})
+ipcMain.on('PlayerB',(event,arg) => {
+  scene_PlayerB = parseInt(arg);
+  if (scene_PlayerB==scene_PlayerA&&( scene_PlayerB==1 ||scene_PlayerB==4 || scene_PlayerB==7)){
+    event.returnValue = scene_PlayerB+1;
+  }
+  else{
+    event.returnValue = scene_PlayerB;
+  }
+  // console.log(gold,select_PlayerA,select_PlayerB);
+})
+ipcMain.on('AddScore',(event,arg) => {
+  if (select_PlayerA == select_PlayerB){
+    if (select_PlayerA == gold){
+      if (parseInt(arg)==0){
+        score += 10;
+      }
+      event.returnValue = "+10";
+    }
+    else{
+      if (parseInt(arg)==0){
+        score += 1;
+      }
+      event.returnValue = "+1";
+    }
+  }
+  else{
+    if (parseInt(arg)==0){
+      score += 0;
+    }
+    event.returnValue = "はずれ！";
+  }
 })
 
+ipcMain.on('UpdateScore',(event,arg) => {
+  event.returnValue = score;
+})
+ipcMain.on('ResetGold',(event,arg) => {
+  gold = Math.floor(Math.random()*2);
+  console.log("gold:" + gold);
+  event.returnValue = "Reset!";
+})
+ipcMain.on('UpdateGold',(event,arg) => {
+  event.returnValue = gold;
+})
+ipcMain.on('SyncSelect_PlayerA',(event,arg) => {
+  select_PlayerA= parseInt(arg);
+  event.returnValue = "send";
+})
+ipcMain.on('SyncSelect_PlayerB',(event,arg) => {
+  select_PlayerB= parseInt(arg);
+  event.returnValue = "send";
+})
+ipcMain.on('Select_PlayerA',(event,arg) =>{
+  event.returnValue = select_PlayerA;
+})
+ipcMain.on('Select_PlayerB',(event,arg) =>{
+  event.returnValue = select_PlayerB;
+})
 app.on('ready', () => {
   globalShortcut.register('esc', () => {
     app.quit();
@@ -75,12 +153,12 @@ app.on('ready', () => {
     mainWindow.webContents.send('synchronous-message','b');
   })
   ////////////////////////セカンドウインドウ
-  // globalShortcut.register('c', () => {
-  //   secondWindow.webContents.send('synchronous-message','c');
-  // })
-  // globalShortcut.register('d', () => {
-  //   secondWindow.webContents.send('synchronous-message','d');
-  // })
+  globalShortcut.register('c', () => {
+    secondWindow.webContents.send('synchronous-message','c');
+  })
+  globalShortcut.register('d', () => {
+    secondWindow.webContents.send('synchronous-message','d');
+  })
   ////////////////////////////////////////////////
 })
 
